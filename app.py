@@ -1,12 +1,9 @@
 import logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-
-
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request     # ← Request added here
 from pydantic import BaseModel, Field
 from typing import Dict, Any
 
-
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 app = FastAPI(
     title="Integration API",
     description="Endpoints Testing"
@@ -33,12 +30,16 @@ class QueryData(BaseModel):
 
 
 @app.post("/snapshot/{session_id}/{snapshot_id}")
-def post_snapshot(session_id: str, snapshot_id: str, data: SnapshotData):
+async def post_snapshot(session_id: str, snapshot_id: str, data: SnapshotData, request: Request):
+    raw = await request.body()                     # bytes
+    logging.info("RAW /snapshot BODY = %s", raw.decode())
+    # -----------------------------------------------------------------
 
+    logging.info("[SNAPSHOT] session_id=%s snapshot_id=%s", session_id, snapshot_id)
+    logging.info("Inputs  : %s", data.inputs)
+    logging.info("Outputs : %s", data.outputs)
     snapshots[(session_id, snapshot_id)] = data.model_dump()
-    logging.info(f"[SNAPSHOT] session_id={session_id}, snapshot_id={snapshot_id}")
-    logging.info(f"Inputs: {data.inputs}")
-    logging.info(f"Outputs: {data.outputs}")
+
 
     return {
         "status": "success",
