@@ -31,6 +31,9 @@ class QueryData(BaseModel):
 def post_snapshot(session_id: str, snapshot_id: str, data: SnapshotData):
 
     snapshots[(session_id, snapshot_id)] = data.model_dump()
+    print(f"[SNAPSHOT] session_id={session_id}, snapshot_id={snapshot_id}")
+    print(f"  inputs={data.inputs}")
+    print(f"  outputs={data.outputs}")    
     return {
         "status": "success",
         "session_id": session_id,
