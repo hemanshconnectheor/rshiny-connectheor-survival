@@ -1,6 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import Dict, Any
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(
     title="Integration API",
@@ -31,9 +34,10 @@ class QueryData(BaseModel):
 def post_snapshot(session_id: str, snapshot_id: str, data: SnapshotData):
 
     snapshots[(session_id, snapshot_id)] = data.model_dump()
-    print(f"[SNAPSHOT] session_id={session_id}, snapshot_id={snapshot_id}")
-    print(f"  inputs={data.inputs}")
-    print(f"  outputs={data.outputs}")    
+    logging.info(f"[SNAPSHOT] session_id={session_id}, snapshot_id={snapshot_id}")
+    logging.info(f"Inputs: {data.inputs}")
+    logging.info(f"Outputs: {data.outputs}")
+
     return {
         "status": "success",
         "session_id": session_id,
