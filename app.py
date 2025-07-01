@@ -1,9 +1,11 @@
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import Dict, Any
-import logging
 
-logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(
     title="Integration API",
