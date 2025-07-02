@@ -75,13 +75,19 @@ def ask_llm(session_id: str, snapshot_id: str, data: QueryData):
         "response": mock_response
     }
 
-@app.get("/ask/{session_id}/{snapshot_id}")
+@app.get("/response/{session_id}/{snapshot_id}")
 def get_llm_response(session_id: str, snapshot_id: str):
 
-    result = llm_responses.get((session_id, snapshot_id))
-    if not result:
-        raise HTTPException(status_code=404, detail="No LLM response found for this session/snapshot.")
-    return result
+    # result = llm_responses.get((session_id, snapshot_id))
+    response = "Hello Akash How are you?"
+    # if not response:
+    #     raise HTTPException(status_code=404, detail="No LLM response found for this session/snapshot.")
+    return {
+        "session_id": session_id,
+        "snapshot_id": snapshot_id,
+        "response": response
+    }
+ 
 
 @app.get("/health")
 def health():
