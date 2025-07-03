@@ -51,6 +51,7 @@ async def post_snapshot(session_id: str, snapshot_id: str, data: SnapshotData, r
 def post_plot(session_id: str, snapshot_id: str, plot_id: str, data: PlotData):
 
     plots[(session_id, snapshot_id, plot_id)] = data.model_dump()
+    logging.info("Outputs : %s", plots)
     return {
         "status": "success",
         "session_id": session_id,
